@@ -1,4 +1,27 @@
-# Main entrypoint of the workflow. 
-# Please follow the best practices: 
+# Main entrypoint of the workflow.
+# Please follow the best practices:
 # https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
-# in particular regarding the standardized folder structure mentioned there. 
+# in particular regarding the standardized folder structure mentioned there.
+
+workdir: config["workdir"]
+
+
+# shell settings
+shell.executable("/bin/bash")
+shell.prefix("set +eu; ")
+
+
+include: "rules/common.smk"
+include: "rules/fastqc.smk"
+
+
+# include: "rules/fastp.smk"
+
+
+rule all:
+    input:
+        "qc/multiqc.html",
+
+
+#         "trimmed/fastp.stats.tsv",
+#         expand("quant_results/{sample}", sample=config["samples"]),

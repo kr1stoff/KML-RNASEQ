@@ -1,0 +1,9 @@
+conda:
+  R: R4.3.1
+  basic: basic
+  rnaseq: rnaseq
+database:
+  hg38: /data/mengxf/Database/genome/hg19/hg19.fa
+threads:
+  high: 32
+  low: 8

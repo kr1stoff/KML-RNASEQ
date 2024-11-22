@@ -1,0 +1,20 @@
+name: hisat2 align
+description: Graph-based alignment of next generation sequencing reads to a population of genomes.
+url: http://daehwankimlab.github.io/hisat2
+authors:
+  - Wibowo Arindrarto
+description: |
+  Map reads with hisat2.
+input:
+  - reads: either 1 or 2 FASTQ files with reads
+  - idx: index files
+output:
+  - bam file with mapped reads
+params:
+  - extra: additional parameters
+notes: |
+  * The `-S` flag must not be used since output is already directly piped to
+    `samtools` for compression.
+  * The `--threads/-p` flag must not be used since threads is set separately
+    via the snakemake `threads` directive.
+  * The wrapper does not yet handle SRA input accessions.
