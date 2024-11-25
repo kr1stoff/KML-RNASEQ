@@ -3,6 +3,7 @@
 # https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
 # in particular regarding the standardized folder structure mentioned there.
 
+
 workdir: config["workdir"]
 
 
@@ -12,16 +13,14 @@ shell.prefix("set +eu; ")
 
 
 include: "rules/common.smk"
+include: "rules/copy_fq.smk"
 include: "rules/fastqc.smk"
-
-
-# include: "rules/fastp.smk"
+include: "rules/fastp.smk"
 
 
 rule all:
     input:
+        expand("rawdata/{sample}.1.fq.gz", sample=df_sample.index),
+        expand("rawdata/{sample}.2.fq.gz", sample=df_sample.index),
         "qc/multiqc.html",
-
-
-#         "trimmed/fastp.stats.tsv",
-#         expand("quant_results/{sample}", sample=config["samples"]),
+        "trimmed/fastp.stats.tsv",

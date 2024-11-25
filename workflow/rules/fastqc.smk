@@ -1,15 +1,15 @@
-rule fastqc1:
+rule fastqc:
     input:
-        get_fastqc_input1,
+        "rawdata/{sample}.{pe}.fq.gz",
     output:
-        html="qc/fastqc/{sample}_1.html",
-        zip="qc/fastqc/{sample}_1_fastqc.zip",
+        html="qc/fastqc/{sample}.{pe}.html",
+        zip="qc/fastqc/{sample}.{pe}_fastqc.zip",
     params:
         extra="--quiet",
     benchmark:
-        "logs/fastqc/{sample}_1.bm"
+        "logs/fastqc/{sample}.{pe}.bm"
     log:
-        "logs/fastqc/{sample}_1.log",
+        "logs/fastqc/{sample}.{pe}.log",
     resources:
         mem_mb=1024,
     conda:
@@ -21,24 +21,10 @@ rule fastqc1:
         f"file:{workflow.basedir}/wrappers/bio/fastqc"
 
 
-userule fastqc1 as fastqc2:
-    input:
-        get_fastqc_input2,
-    output:
-        html="qc/fastqc/{sample}_2.html",
-        zip="qc/fastqc/{sample}_2_fastqc.zip",
-    benchmark:
-        "logs/fastqc/{sample}_2.bm"
-    log:
-        "logs/fastqc/{sample}_2.log",
-
-
 rule multiqc:
     input:
         expand(
-            "qc/fastqc/{sample}_{pe}_fastqc.zip",
-            pe=["1", "2"],
-            sample=config["samples"],
+            "qc/fastqc/{sample}.{pe}_fastqc.zip", sample=df_sample.index, pe=["1", "2"]
         ),
     output:
         "qc/multiqc.html",

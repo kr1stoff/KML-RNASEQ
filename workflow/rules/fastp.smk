@@ -1,6 +1,6 @@
 rule fastp:
     input:
-        sample=[".rawdata/{sample}_1.fastq.gz", ".rawdata/{sample}_2.fastq.gz"],
+        sample=[".rawdata/{sample}.1.fastq.gz", ".rawdata/{sample}.2.fastq.gz"],
     output:
         trimmed=["trimmed/{sample}.1.fastq", "trimmed/{sample}.2.fastq"],
         html="trimmed/{sample}.html",
@@ -20,7 +20,7 @@ rule fastp:
 
 rule qc_stat:
     input:
-        expand("trimmed/{sample}.json", sample=config["samples"]),
+        rules.fastp.output.json,
     output:
         "trimmed/fastp.stats.tsv",
     benchmark:
