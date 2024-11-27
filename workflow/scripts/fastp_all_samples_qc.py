@@ -1,9 +1,11 @@
-import sys
-from pathlib import Path
-import json
-import pandas as pd
 import numpy as np
+import pandas as pd
+import json
+from pathlib import Path
 import sys
+
+# logging
+sys.stderr = open(snakemake.log[0], "w")
 
 
 def fastp_all_samples_qc(files_fastp_json, outfile=None):
@@ -32,4 +34,4 @@ def fastp_all_samples_qc(files_fastp_json, outfile=None):
 
 
 if __name__ == "__main__":
-    fastp_all_samples_qc(sys.argv[2:], sys.argv[1])
+    fastp_all_samples_qc(snakemake.input, snakemake.output[0])

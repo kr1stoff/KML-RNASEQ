@@ -1,6 +1,6 @@
 rule fastp:
     input:
-        sample=[".rawdata/{sample}.1.fastq.gz", ".rawdata/{sample}.2.fastq.gz"],
+        sample=[rules.copy_fq.output, rules.copy_fq2.output],
     output:
         trimmed=["trimmed/{sample}.1.fastq", "trimmed/{sample}.2.fastq"],
         html="trimmed/{sample}.html",
@@ -20,12 +20,12 @@ rule fastp:
 
 rule qc_stat:
     input:
-        rules.fastp.output.json,
+        expand("trimmed/{sample}.json", sample=df_sample.index),
     output:
         "trimmed/fastp.stats.tsv",
     benchmark:
         "logs/fastp/qc_stat.bm"
     log:
         "logs/fastp/qc_stat.log",
-    shell:
-        "python {config[scripts]}/fastp_all_samples_qc.py {output} {input} &> {log}"
+    script:
+        "../scripts/fastp_all_samples_qc.py"

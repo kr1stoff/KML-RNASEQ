@@ -4,7 +4,7 @@ rule copy_fq:
     output:
         "rawdata/{sample}.1.fq.gz",
     log:
-        "logs/copy_fq_{sample}.log",
+        "logs/copy_fq/{sample}.log",
     run:
         if input[0].endswith(".gz"):
             shell("cp {input} {output} 2> {log}")
@@ -18,4 +18,4 @@ use rule copy_fq as copy_fq2 with:
     output:
         "rawdata/{sample}.2.fq.gz",
     log:
-        "logs/copy_fq_{sample}.log",
+        "logs/copy_fq/{sample}.log",

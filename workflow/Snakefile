@@ -20,7 +20,5 @@ include: "rules/fastp.smk"
 
 rule all:
     input:
-        expand("rawdata/{sample}.1.fq.gz", sample=df_sample.index),
-        expand("rawdata/{sample}.2.fq.gz", sample=df_sample.index),
         "qc/multiqc.html",
         "trimmed/fastp.stats.tsv",
