@@ -4,7 +4,6 @@ from subprocess import run
 import logging
 from kml_rnaseq import get_conda_env_dict
 from kml_rnaseq import get_threads_dict
-from kml_rnaseq import get_my_scripts_path
 from kml_rnaseq import get_database_dict
 
 
@@ -25,7 +24,6 @@ def create_snakemake_configfile(sample_names, workdir) -> dict:
         'samples': sample_names,
         'threads': get_threads_dict(),
         'conda': get_conda_env_dict(),
-        'scripts': get_my_scripts_path(),
         'metadata': f'{dir_temp}/metadata.tsv',
         'database': get_database_dict()
     }
@@ -44,7 +42,7 @@ def create_snakemake_configfile(sample_names, workdir) -> dict:
 #     """
 #     logging.info('运行 snakemake')
 #     activate = get_conda_env_dict()['activate']
-#     cores = get_threads_dict()['high']
+#     cores = get_threads_dict()['max']
 #     snakefile = Path(__file__).resolve().parents[1].joinpath('wf-lvisa/Snakefile')
 #     configfile = f'{workdir}/.temp/snakemake.yaml'
 #     logfile = f'{workdir}/.temp/snakemake.log'

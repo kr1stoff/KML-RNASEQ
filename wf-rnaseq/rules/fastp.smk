@@ -27,5 +27,5 @@ rule qc_stat:
         "logs/fastp/qc_stat.bm"
     log:
         "logs/fastp/qc_stat.log",
-    shell:
-        "python {config[scripts]}/fastp_all_samples_qc.py {output} {input} &> {log}"
+    script:
+        "../scripts/fastp_all_samples_qc.py"

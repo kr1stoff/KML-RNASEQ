@@ -13,9 +13,5 @@ def test_database():
     print(get_database_dict())
 
 
-def test_my_scripts_path():
-    print(get_my_scripts_path())
-
-
 def test_software():
     print(get_software_dict())

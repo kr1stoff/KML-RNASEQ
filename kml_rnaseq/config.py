@@ -51,8 +51,3 @@ def get_threads_dict() -> dict:
     dict_thr = {'high': high_threads, 'low': low_threads}
 
     return dict_thr
-
-
-def get_my_scripts_path() -> str:
-    logging.info('获取 scripts 目录地址')
-    return str(Path(__file__).resolve().parents[1].joinpath('scripts'))
