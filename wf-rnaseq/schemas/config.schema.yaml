@@ -1,0 +1,55 @@
+$schema: "http://json-schema.org/draft-04/schema#"
+
+description: snakemake configuration file
+
+type: object
+
+properties:
+  conda:
+    type: object
+    properties:
+      R:
+        type: string
+      basic:
+        type: string
+      rnaseq:
+        type: string
+    required:
+      - R
+      - basic
+      - rnaseq
+
+  database:
+    type: object
+    properties:
+      hg38:
+        type: string
+
+  scripts:
+    type: string
+
+  samples:
+    type: array
+    items:
+      type: string
+
+  threads:
+    type: object
+    properties:
+      high:
+        type: integer
+      low:
+        type: integer
+    required:
+      - high
+      - low
+
+  workdir:
+    type: string
+
+required:
+  - conda
+  - scripts
+  - samples
+  - threads
+  - workdir

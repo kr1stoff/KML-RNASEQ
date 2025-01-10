@@ -1,0 +1,19 @@
+workdir: config["workdir"]
+
+
+# shell settings
+shell.executable("/bin/bash")
+shell.prefix("set +eu; ")
+
+
+rule all:
+    input:
+        "qc/multiqc.html",
+        "trimmed/fastp.stats.tsv",
+        expand("quant_results/{sample}", sample=config["samples"]),
+
+
+include: "rules/common.smk"
+include: "rules/fastqc.smk"
+include: "rules/fastp.smk"
+include: "rules/kallisto.smk"
