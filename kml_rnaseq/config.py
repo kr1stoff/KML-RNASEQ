@@ -48,6 +48,6 @@ def get_threads_dict() -> dict:
     max_threads = os.cpu_count()
     high_threads = max_threads
     low_threads = math.floor(high_threads / 4)
-    dict_thr = {'high': high_threads, 'low': low_threads}
+    dict_thr = {'high': high_threads, 'low': low_threads, 'max': max_threads}
 
     return dict_thr

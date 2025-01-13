@@ -14,19 +14,19 @@ properties:
         type: string
       rnaseq:
         type: string
+      python:
+        type: string
     required:
       - R
       - basic
       - rnaseq
+      - python
 
   database:
     type: object
     properties:
       hg38:
         type: string
-
-  scripts:
-    type: string
 
   samples:
     type: array
@@ -40,16 +40,18 @@ properties:
         type: integer
       low:
         type: integer
+      max:
+        type: integer
     required:
       - high
       - low
+      - max
 
   workdir:
     type: string
 
 required:
   - conda
-  - scripts
   - samples
   - threads
   - workdir

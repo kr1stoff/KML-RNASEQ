@@ -1,4 +1,4 @@
-from kml_rnaseq import get_threads_dict, get_conda_env_dict, get_database_dict, get_my_scripts_path, get_software_dict
+from kml_rnaseq import get_threads_dict, get_conda_env_dict, get_database_dict
 
 
 def test_threads():
@@ -11,7 +11,3 @@ def test_conda_env():
 
 def test_database():
     print(get_database_dict())
-
-
-def test_software():
-    print(get_software_dict())
