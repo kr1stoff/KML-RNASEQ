@@ -1,1 +1,2 @@
-hg38: /data/mengxf/Database/genome/hg38/hg38.fa
+hisat2_index: /data/mengxf/Database/HISAT2/hg38/genome
+gtf: /data/mengxf/Database/genome/hg38/hg38.ncbiRefSeq.gtf

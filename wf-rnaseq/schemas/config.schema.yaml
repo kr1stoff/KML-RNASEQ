@@ -25,7 +25,7 @@ properties:
   database:
     type: object
     properties:
-      hg38:
+      hisat2_index:
         type: string
 
   samples:
