@@ -24,3 +24,18 @@ rule feature_counts:
         config["conda"]["rnaseq"]
     wrapper:
         f"file:{workflow.basedir}/wrappers/bio/subread/featurecounts"
+
+
+rule gene_count:
+    input:
+        "feature_counts/all.featureCounts",
+    output:
+        "feature_counts/gene_count.tsv",
+    log:
+        "logs/feature_counts/gene_count.log",
+    benchmark:
+        "logs/feature_counts/gene_count.benchmark"
+    conda:
+        config["conda"]["python"]
+    script:
+        "../scripts/gene_count.py"

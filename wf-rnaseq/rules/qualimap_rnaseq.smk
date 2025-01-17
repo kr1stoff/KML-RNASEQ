@@ -1,4 +1,4 @@
-rule qualimap:
+rule qualimap_rnaseq:
     input:
         bam=rules.hisat2_align.output,
         gtf=config["database"]["gtf"],

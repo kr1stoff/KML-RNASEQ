@@ -11,12 +11,13 @@ rule all:
         "qc/multiqc.html",
         "trimmed/fastp.stats.tsv",
         expand("qc/qualimap_rnaseq/{sample}", sample=config["samples"]),
-        "feature_counts/all.featureCounts",
+        "qc/qualimap_counts/output",
 
 
 include: "rules/common.smk"
 include: "rules/fastqc.smk"
 include: "rules/fastp.smk"
 include: "rules/hisat2_align.smk"
-include: "rules/qualimap.smk"
+include: "rules/qualimap_rnaseq.smk"
 include: "rules/feature_counts.smk"
+include: "rules/qualimap_counts.smk"

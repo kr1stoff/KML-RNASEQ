@@ -27,6 +27,11 @@ properties:
     properties:
       hisat2_index:
         type: string
+      gtf:
+        type: string
+
+  metadata:
+    type: string
 
   samples:
     type: array

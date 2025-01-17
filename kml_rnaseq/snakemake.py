@@ -7,11 +7,12 @@ from kml_rnaseq import get_threads_dict
 from kml_rnaseq import get_database_dict
 
 
-def create_snakemake_configfile(sample_names, workdir) -> dict:
+def create_snakemake_configfile(sample_names, workdir, metadata) -> dict:
     """
     创建 snakemake 配置文件
     :param sample_names:    样本名列表
     :param workdir:         分析结果目录
+    :param metadata:        样本元数据
     :return:
     """
     logging.info('创建 snakemake 配置文件')
@@ -24,7 +25,7 @@ def create_snakemake_configfile(sample_names, workdir) -> dict:
         'samples': sample_names,
         'threads': get_threads_dict(),
         'conda': get_conda_env_dict(),
-        'metadata': f'{dir_temp}/metadata.tsv',
+        'metadata': metadata,
         'database': get_database_dict()
     }
 
