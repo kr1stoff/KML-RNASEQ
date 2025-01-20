@@ -9,8 +9,9 @@ shell.prefix("set +eu; ")
 rule all:
     input:
         "qc/multiqc.html",
-        "trimmed/fastp.stats.tsv",
+        expand("qc/RPKM_saturation/{sample}.saturation.pdf", sample=config["samples"]),
         expand("qc/qualimap_rnaseq/{sample}", sample=config["samples"]),
+        "trimmed/fastp.stats.tsv",
         "feature_counts/gene_count.tsv",
 
 
@@ -20,3 +21,4 @@ include: "rules/fastp.smk"
 include: "rules/hisat2_align.smk"
 include: "rules/qualimap_rnaseq.smk"
 include: "rules/feature_counts.smk"
+include: "rules/rseqc_saturation.smk"

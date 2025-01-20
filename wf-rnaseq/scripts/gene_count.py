@@ -12,10 +12,11 @@ with open(feature_counts) as f, open(output_file, 'w') as g:
     header = f.readline().strip().split('\t')
     rawnames = header[6:]
     names = [rn.split('/')[-1].replace('.bam', '') for rn in rawnames]
-    g.write('Gene\t' + '\t'.join(names) + '\n')
+    g.write('Gene\tLength\t' + '\t'.join(names) + '\n')
 
     for line in f:
         lns = line.strip().split('\t')
         gene = lns[0]
+        length = lns[5]
         counts = lns[6:]
-        g.write(gene + '\t' + '\t'.join(counts) + '\n')
+        g.write(f'{gene}\t{length}\t' + '\t'.join(counts) + '\n')

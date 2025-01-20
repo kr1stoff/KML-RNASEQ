@@ -29,6 +29,8 @@ properties:
         type: string
       gtf:
         type: string
+      rseqc_bed:
+        type: string
 
   metadata:
     type: string
