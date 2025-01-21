@@ -12,7 +12,9 @@ rule all:
         expand("qc/RPKM_saturation/{sample}.saturation.pdf", sample=config["samples"]),
         expand("qc/qualimap_rnaseq/{sample}", sample=config["samples"]),
         "trimmed/fastp.stats.tsv",
-        "feature_counts/gene_count.tsv",
+        "feature_counts/rpkm.tsv",
+        "feature_counts/tpm.tsv",
+        "gene_quantitaion/boxplot",
 
 
 include: "rules/common.smk"
@@ -22,3 +24,5 @@ include: "rules/hisat2_align.smk"
 include: "rules/qualimap_rnaseq.smk"
 include: "rules/feature_counts.smk"
 include: "rules/rseqc_saturation.smk"
+include: "rules/rpkm_tpm.smk"
+include: "rules/gene_quantitation.smk"

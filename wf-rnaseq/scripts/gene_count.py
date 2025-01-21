@@ -1,6 +1,9 @@
+# 根据 featureCounts 结果整理基因表达表格，基因名，基因长度，各个样本基因表达量（reas 数）
+
 import sys
 
 sys.stderr = open(snakemake.log[0], "w")
+
 feature_counts = snakemake.input[0]
 output_file = snakemake.output[0]
 
