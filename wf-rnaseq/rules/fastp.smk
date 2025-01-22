@@ -2,7 +2,7 @@ rule fastp:
     input:
         sample=[".rawdata/{sample}_1.fastq.gz", ".rawdata/{sample}_2.fastq.gz"],
     output:
-        trimmed=["trimmed/{sample}.1.fastq", "trimmed/{sample}.2.fastq"],
+        trimmed=["trimmed/{sample}.1.fastq.gz", "trimmed/{sample}.2.fastq.gz"],
         html="trimmed/{sample}.html",
         json="trimmed/{sample}.json",
     conda:

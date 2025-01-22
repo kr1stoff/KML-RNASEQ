@@ -3,9 +3,9 @@ from kml_rnaseq import get_sample_names_by_samptab
 # from kml_rnaseq import run_snakemake
 
 
-work_dir = '/data/mengxf/Project/KML250113_RNAseq_pipeline/result/250120'
-sample_table = '/data/mengxf/Project/KML250113_RNAseq_pipeline/input/250115.input.tsv'
-metadata = '/data/mengxf/Project/KML250113_RNAseq_pipeline/input/250115.metadata.tsv'
+work_dir = '/data/mengxf/Project/KML250122_rnaseqe_ZiYan/result/250122'
+sample_table = '/data/mengxf/Project/KML250122_rnaseqe_ZiYan/jupyter/250122/input.tsv'
+metadata = '/data/mengxf/Project/KML250122_rnaseqe_ZiYan/jupyter/250122/metadata.tsv'
 
 
 def test_create():
