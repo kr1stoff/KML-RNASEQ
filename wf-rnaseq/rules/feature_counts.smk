@@ -30,7 +30,8 @@ rule gene_count:
     input:
         "feature_counts/all.featureCounts",
     output:
-        "feature_counts/gene_count.tsv",
+        gene_count="feature_counts/gene_count.tsv",
+        withNTC="feature_counts/gene_count_withNTC.tsv",
     log:
         "logs/feature_counts/gene_count.log",
     benchmark:
@@ -39,3 +40,16 @@ rule gene_count:
         config["conda"]["python"]
     script:
         "../scripts/gene_count.py"
+
+
+rule filter_gene_count:
+    input:
+        "feature_counts/gene_count.tsv",
+    output:
+        "feature_counts/gene_count_filtered.tsv",
+    log:
+        "logs/feature_counts/filter_gene_count.log",
+    conda:
+        config["conda"]["python"]
+    script:
+        "../scripts/filter_gene_count.py"

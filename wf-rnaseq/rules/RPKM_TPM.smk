@@ -1,6 +1,6 @@
 rule calculate_RPKM_TPM:
     input:
-        rules.gene_count.output,
+        rules.gene_count.output.gene_count,
     output:
         rpkm="feature_counts/rpkm.tsv",
         tpm="feature_counts/tpm.tsv",
@@ -18,7 +18,7 @@ rule filter_tpm:
     input:
         rules.calculate_RPKM_TPM.output.tpm,
     output:
-        "feature_counts/filtered_tpm.tsv",
+        "feature_counts/tpm_filtered.tsv",
     log:
         "logs/feature_counts/filter_tpm.log",
     benchmark:

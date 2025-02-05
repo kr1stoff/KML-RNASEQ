@@ -31,7 +31,6 @@ for i in range(meta_df.shape[1]):
     # 画图
     sns.set_theme(style="ticks")
     f, ax = plt.subplots(figsize=(7, 6))
-    # ax.set_yscale("log")
     sns.boxplot(filt_long_df, x="Sample", y="TPM", hue="Group", width=.3, palette="vlag")
     ax.set(ylabel="", xlabel="")
     ax.set_ylim(0, int(filt_long_df['TPM'].max()) + 1)

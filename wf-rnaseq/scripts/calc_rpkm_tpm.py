@@ -19,7 +19,7 @@ def calc_rpkm(df):
     total_reads = np.sum(sample_reads.values, axis=0).reshape(1, -1)
     rate = sample_reads.values / gene_len.values
     rpkm = rate / total_reads * 1e9
-    return pd.DataFrame(data=rpkm, columns=sample_name, index=df['Gene'])
+    return pd.DataFrame(data=rpkm, columns=sample_name, index=df['Geneid'])
 
 
 def calc_tpm(rpkm_df):

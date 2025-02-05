@@ -8,13 +8,23 @@ shell.prefix("set +eu; ")
 
 rule all:
     input:
+        # qc
         "qc/multiqc.html",
         expand("qc/RPKM_saturation/{sample}.saturation.pdf", sample=config["samples"]),
         expand("qc/qualimap_rnaseq/{sample}", sample=config["samples"]),
         "trimmed/fastp.stats.tsv",
+        # feature count
         "feature_counts/rpkm.tsv",
         "feature_counts/tpm.tsv",
-        "gene_quantitaion/boxplot",
+        "feature_counts/gene_count_filtered.tsv",
+        # gene quantititation
+        "gene_quant/boxplot",
+        "gene_quant/violinplot",
+        "gene_quant/intersample_correlation/output.tsv",
+        "gene_quant/intersample_correlation/output.png",
+        "gene_quant/pca",
+        # gene differential expression
+        "gene_idff/DESeq2",
 
 
 include: "rules/common.smk"
@@ -25,4 +35,5 @@ include: "rules/qualimap_rnaseq.smk"
 include: "rules/feature_counts.smk"
 include: "rules/rseqc_saturation.smk"
 include: "rules/rpkm_tpm.smk"
-include: "rules/gene_quantitation.smk"
+include: "rules/gene_quant.smk"
+include: "rules/gene_diff.smk"
