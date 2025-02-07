@@ -24,7 +24,7 @@ rule all:
         "gene_quant/intersample_correlation/output.png",
         "gene_quant/pca",
         # gene differential expression
-        "gene_idff/DESeq2",
+        "gene_diff/DESeq2",
 
 
 include: "rules/common.smk"

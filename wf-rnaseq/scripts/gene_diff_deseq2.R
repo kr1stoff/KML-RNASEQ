@@ -32,7 +32,7 @@ deseq2_stat <- function(group_column) {
     # write.table(vsd, 'norm_matrix.txt', sep = '\t', col.names = NA, quote = FALSE)
     # 第二步，差异分析，详见 ?DESeq 和 ?results
     # 标准方法
-    dds <- DESeq(dds, parallel = FALSE) # parallel = TRUE 将启用多线程模式
+    dds <- DESeq(dds, parallel = TRUE) # parallel = TRUE 将启用多线程模式
     suppressMessages(dds)
     res <- results(dds, contrast = c("group", unique(group)), pAdjustMethod = "fdr", alpha = 0.05)
     # an alternate analysis: likelihood ratio test
@@ -56,7 +56,7 @@ deseq2_stat <- function(group_column) {
     volcano_p <- ggplot(deseq_res, aes(log2FoldChange, -log(padj, 10))) +
         geom_point(aes(color = sig), alpha = 0.6, size = 1) +
         scale_color_manual(values = c("blue2", "gray30", "red2")) +
-        theme(panel.grid = element_blank(), panel.background = element_rect(color = "black", fill = "transparent"), legend.position = c(0.26, 0.92)) +
+        theme(panel.grid = element_blank(), panel.background = element_rect(color = "black", fill = "transparent"), legend.position = c(0.4, 0.9)) +
         theme(legend.title = element_blank(), legend.key = element_rect(fill = "transparent"), legend.background = element_rect(fill = "transparent")) +
         geom_vline(xintercept = c(-1, 1), color = "gray", size = 0.25) +
         geom_hline(yintercept = -log(0.05, 10), color = "gray", size = 0.25) +
@@ -68,4 +68,4 @@ deseq2_stat <- function(group_column) {
 
 # 迭代元数据中的每个分组列，并生成 PCA 图
 group_columns <- colnames(metadata)
-pca_plots <- lapply(group_columns, deseq2_stat)
+stats_res <- lapply(group_columns, deseq2_stat)
