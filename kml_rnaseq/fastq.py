@@ -3,6 +3,7 @@ import pandas as pd
 from subprocess import run
 import re
 import logging
+from multiprocessing import Pool
 
 
 def prepare_fastq_by_samptab(workdir, samptab: str) -> None:
@@ -17,13 +18,40 @@ def prepare_fastq_by_samptab(workdir, samptab: str) -> None:
     logging.info('在项目目录下面准备 fastq 文件')
     # 创建 {workdir}/.rawdata
     Path(workdir).joinpath('.rawdata').mkdir(exist_ok=True, parents=True)
-
     df = samptab2dataframe(samptab)
-
-    # 软链接或解压
+    # 并行复制或压缩 fastq
+    args = []
     for row in df.iterrows():
         name, fastq1, fastq2 = row[1]
-        copy_fastq(workdir, name, fastq1, fastq2)
+        args.append((workdir, name, fastq1, fastq2))
+    with Pool(processes=4) as pool:
+        pool.map(copy_fastq, args)
+
+
+def copy_fastq(args: tuple) -> None:
+    """
+    [250211] 改成 pool.map 并行版本
+    复制或压缩 fastq 到 .rawdata 目, 按照指定格式命名
+    :param args:     tuple(workdir, name, fq1, fq2)
+        workdir:     分析解雇目录
+        name:        样本名
+        fq1:         fastq1
+        fq2:         fastq2
+    """
+    workdir, name, fq1, fq2 = args
+    logging.info('复制或压缩 fastq 到 .rawdata 目, 按照指定格式命名')
+    if fq1.endswith('.gz'):
+        cml = f"""
+        cp {fq1} {workdir}/.rawdata/{name}_1.fastq.gz
+        cp {fq2} {workdir}/.rawdata/{name}_2.fastq.gz
+        """
+    else:
+        cml = f"""
+        gzip -c {fq1} > {workdir}/.rawdata/{name}_1.fastq.gz
+        gzip -c {fq2} > {workdir}/.rawdata/{name}_2.fastq.gz
+        """
+    logging.debug(cml)
+    run(cml, shell=True, executable='/bin/bash', capture_output=True)
 
 
 def get_sample_names_by_samptab(samptab: str) -> list:
@@ -57,29 +85,6 @@ def samptab2dataframe(samptab: str) -> pd.DataFrame:
     check_samptab(df)
 
     return df
-
-
-def copy_fastq(workdir, name, fq1: str, fq2) -> None:
-    """
-    复制或压缩 fastq 到 .rawdata 目, 按照指定格式命名
-    :param workdir:     分析解雇目录
-    :param name:        样本名
-    :param fq1:         fastq1
-    :param fq2:         fastq2
-    """
-    logging.info('复制或压缩 fastq 到 .rawdata 目, 按照指定格式命名')
-    if fq1.endswith('.gz'):
-        cml = f"""
-        cp {fq1} {workdir}/.rawdata/{name}_1.fastq.gz
-        cp {fq2} {workdir}/.rawdata/{name}_2.fastq.gz
-        """
-    else:
-        cml = f"""
-        gzip -c {fq1} > {workdir}/.rawdata/{name}_1.fastq.gz
-        gzip -c {fq2} > {workdir}/.rawdata/{name}_2.fastq.gz
-        """
-    logging.debug(cml)
-    run(cml, shell=True, executable='/bin/bash', capture_output=True)
 
 
 def check_samptab(df) -> None:

@@ -26,6 +26,7 @@ rule all:
         # gene differential expression
         "gene_diff/DESeq2/DEG",
         "gene_diff/edgeR/DEG",
+        "gene_diff/DESeq2/pheatmap",
 
 
 include: "rules/common.smk"

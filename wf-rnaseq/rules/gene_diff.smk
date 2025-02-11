@@ -17,6 +17,22 @@ rule gene_diff_deseq2:
         "../scripts/gene_diff_deseq2.R"
 
 
+rule deseq2_pheatmap:
+    input:
+        deseq2_deg_dir=rules.gene_diff_deseq2.output[0],
+        metadata=config["metadata"],
+    output:
+        directory("gene_diff/DESeq2/pheatmap"),
+    log:
+        "logs/gene_diff/deseq2_pheatmap.log",
+    benchmark:
+        "logs/gene_diff/deseq2_pheatmap.benchmark"
+    conda:
+        config["conda"]["Rpheatmap"]
+    script:
+        "../scripts/deseq2_pheatmap.R"
+
+
 rule gene_diff_edger:
     input:
         filt_gene_count=rules.filter_gene_count.output[0],

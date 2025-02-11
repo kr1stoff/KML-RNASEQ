@@ -26,7 +26,7 @@ outdir <- snakemake@output[[1]]
 dir.create(outdir, showWarnings = FALSE, recursive = TRUE)
 
 
-# Function
+######################################## Function ########################################
 get_pairwise_combinations <- function(group) {
   # 应对 3 组及以上情况, 如果不清楚 case control 就都做一遍
   categories <- unique(group)
@@ -61,6 +61,7 @@ write_deseq_res <- function(pairwise_combinations,
       sep = "\t",
       quote = FALSE
     )
+    # ENSG 转 symbol 也输出
     return(out_tab)
   })
   return(lapp_deseq_res)
@@ -174,6 +175,7 @@ deseq2_stat <- function(group_column) {
   # 火山图
   volcano_res <- sapply(unlist(lapp_deseq_res), deseq2_volcano)
 }
+######################################## Function ########################################
 
 
 # * main

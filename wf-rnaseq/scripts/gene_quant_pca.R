@@ -5,6 +5,8 @@ sink(log, type = "message")
 
 # library
 library(tidyverse)
+library(ggrepel)
+library(dplyr)
 
 # * io
 genefile <- snakemake@input[["filtered_tpm"]]
@@ -28,11 +30,13 @@ generate_pca_plot <- function(group_column) {
     pca_var <- pca$sdev^2
     pca_var_per <- round(pca_var / sum(pca_var) * 100, 2)
 
+    # [250211] 孟博, 图上加样本名
     pca_table <- as.data.frame(pca$x) %>%
-        mutate(group = genedata$group)
+        mutate(group = genedata$group, sample_name = rownames(genedata))
 
     p <- ggplot(aes(PC1, PC2, color = group), data = pca_table) +
         geom_point(size = 3, aes(shape = group)) +
+        geom_text_repel(aes(label = sample_name), size = 3) +
         theme_bw() +
         labs(
             x = paste("PC1(", pca_var_per[1], "%)", sep = ""),
