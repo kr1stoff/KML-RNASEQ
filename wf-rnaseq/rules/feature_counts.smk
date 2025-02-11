@@ -46,7 +46,7 @@ rule filter_gene_count:
     input:
         "feature_counts/gene_count.tsv",
     output:
-        "feature_counts/gene_count_filtered.tsv",
+        "feature_counts/gene_count_filter.tsv",
     log:
         "logs/feature_counts/filter_gene_count.log",
     conda:

@@ -2,4 +2,5 @@ activate: /home/mengxf/miniforge3/bin/activate
 basic: basic
 python: python3.12
 R: R.rnaseq
+R4: R4.3.1
 rnaseq: rnaseq

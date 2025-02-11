@@ -10,13 +10,13 @@ rule all:
     input:
         # qc
         "qc/multiqc.html",
+        "trimmed/fastp.stats.tsv",
         expand("qc/RPKM_saturation/{sample}.saturation.pdf", sample=config["samples"]),
         expand("qc/qualimap_rnaseq/{sample}", sample=config["samples"]),
-        "trimmed/fastp.stats.tsv",
         # feature count
         "feature_counts/rpkm.tsv",
         "feature_counts/tpm.tsv",
-        "feature_counts/gene_count_filtered.tsv",
+        "feature_counts/gene_count_filter.tsv",
         # gene quantititation
         "gene_quant/boxplot",
         "gene_quant/violinplot",
@@ -24,7 +24,8 @@ rule all:
         "gene_quant/intersample_correlation/output.png",
         "gene_quant/pca",
         # gene differential expression
-        "gene_diff/DESeq2",
+        "gene_diff/DESeq2/DEG",
+        "gene_diff/edgeR/DEG",
 
 
 include: "rules/common.smk"

@@ -18,7 +18,7 @@ rule filter_tpm:
     input:
         rules.calculate_RPKM_TPM.output.tpm,
     output:
-        "feature_counts/tpm_filtered.tsv",
+        "feature_counts/tpm_filter.tsv",
     log:
         "logs/feature_counts/filter_tpm.log",
     benchmark:
