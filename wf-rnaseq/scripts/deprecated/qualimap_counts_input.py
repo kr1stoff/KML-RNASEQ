@@ -3,7 +3,7 @@ from pathlib import Path
 
 sys.stderr = open(snakemake.log[0], "w")
 count_file = snakemake.input.genecount
-meta_file = snakemake.input.metadata
+metafile = snakemake.input.metadata
 output_file = snakemake.output[0]
 
 with open(count_file) as f:
@@ -12,7 +12,7 @@ with open(count_file) as f:
     name_pos = {h[1]: h[0]+1 for h in enumerate(header)}
 
 
-with open(meta_file) as f, open(output_file, 'w') as g:
+with open(metafile) as f, open(output_file, 'w') as g:
     g.write("#Sample\tCondition\tPath\tColumn\n")
     # * 跳过表头
     next(f)

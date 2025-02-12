@@ -7,13 +7,31 @@ sink(log, type = "message")
 # library
 library(tidyverse)
 library(pheatmap)
-library(org.Hs.eg.db)
+library(dplyr)
+
 
 # * io
-in_dir <- snakemake@input[["deseq2_deg_dir"]]
-meta_file <- snakemake@input[["metadata"]]
-out_dir <- snakemake@output[[1]]
-dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+alldir <- snakemake@input[["alldir"]]
+degdir <- snakemake@input[["degdir"]]
+metafile <- snakemake@input[["metadata"]]
+outdir <- snakemake@output[[1]]
+dir.create(outdir, showWarnings = FALSE, recursive = TRUE)
+
+
+# 元数据
+metadata <- read.delim(
+    metafile,
+    row.names = 1,
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+)
+# 不同分组方案生成的均一化表格
+files <- list.files(
+    path = alldir,
+    pattern = "\\.norm_matrix\\.tsv$",
+    full.names = TRUE
+)
+
 
 ######################################## Function ########################################
 #' 获取 top20 差异基因
@@ -21,21 +39,15 @@ dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 #' return: top20 基因数组
 get_top20_diff_genes <- function(scheme) {
     myprn <- paste0(scheme, ".*_vs_.*\\.tsv$")
-    diff_file <- list.files(
-        path = in_dir,
+    # 分组方案内选一个就可以了
+    difffile <- list.files(
+        path = degdir,
         pattern = myprn,
         full.names = TRUE
     )[1]
-    diff_data <- read.delim(diff_file, nrows = 100)
-    symbols <- mapIds(
-        org.Hs.eg.db,
-        keys = diff_data$gene_id,
-        column = "SYMBOL",
-        keytype = "ENSEMBL"
-    )
-    # 映射为NA的丢弃
-    isna_symbols <- symbols[!is.na(symbols)]
-    return(isna_symbols[1:20])
+    diff_data <- read.delim(difffile)
+    top20_symbols <- head(unique(diff_data$symbol), 20)
+    return(top20_symbols)
 }
 
 
@@ -49,7 +61,7 @@ pheatmap_by_scheme <- function(top20_genes_df, scheme) {
     df_anno_row <- data.frame(SampleGroup = mygrp)
     rownames(df_anno_row) <- rownames(top20_genes_df)
     # pheatmap 热图
-    out_fig <- sprintf("%s/%s.pheatmap.png", out_dir, scheme)
+    out_fig <- sprintf("%s/%s.pheatmap.png", outdir, scheme)
     png(
         file = out_fig,
         width = 15,
@@ -91,19 +103,5 @@ analysis_by_scheme_files <- function(norm_file) {
 }
 ######################################## Function ########################################
 
-
 # * main
-# 元数据
-metadata <- read.delim(
-    meta_file,
-    row.names = 1,
-    stringsAsFactors = FALSE,
-    check.names = FALSE
-)
-# 不同分组方案生成的均一化表格
-files <- list.files(
-    path = in_dir,
-    pattern = "\\.norm_matrix\\.tsv$",
-    full.names = TRUE
-)
 analysis_res <- sapply(files, analysis_by_scheme_files)

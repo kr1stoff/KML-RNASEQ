@@ -24,8 +24,9 @@ rule all:
         "gene_quant/intersample_correlation/output.png",
         "gene_quant/pca",
         # gene differential expression
+        "gene_diff/DESeq2/ALL",
+        "gene_diff/edgeR/ALL",
         "gene_diff/DESeq2/DEG",
-        "gene_diff/edgeR/DEG",
         "gene_diff/DESeq2/pheatmap",
 
 
@@ -38,4 +39,5 @@ include: "rules/feature_counts.smk"
 include: "rules/rseqc_saturation.smk"
 include: "rules/rpkm_tpm.smk"
 include: "rules/gene_quant.smk"
-include: "rules/gene_diff.smk"
+include: "rules/gene_diff_deseq2.smk"
+include: "rules/gene_diff_edger.smk"

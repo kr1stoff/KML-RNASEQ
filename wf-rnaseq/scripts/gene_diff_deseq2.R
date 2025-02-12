@@ -27,6 +27,9 @@ dir.create(outdir, showWarnings = FALSE, recursive = TRUE)
 
 
 ######################################## Function ########################################
+#' 获取分组方案两两组合
+#' group: 分组列表
+#' 返回: 分组方案两两组合列表
 get_pairwise_combinations <- function(group) {
   # 应对 3 组及以上情况, 如果不清楚 case control 就都做一遍
   categories <- unique(group)
@@ -36,6 +39,40 @@ get_pairwise_combinations <- function(group) {
 }
 
 
+#' 输出差异表格添加 symbol 列. 删除转化不出 symbol 的行
+#' group_column: 分组列名
+#' cat1: 分组1
+#' cat2: 分组2
+#' deseq_res: 差异分析结果
+#' outfile: 输出文件名
+write_symbol_table <- function(group_column,
+                               cat1,
+                               cat2,
+                               deseq_res,
+                               outfile) {
+  # * ENSG 转 symbol 也输出
+  deseq_res$symbol <- mapIds(
+    org.Hs.eg.db,
+    keys = deseq_res$gene_id,
+    column = "SYMBOL",
+    keytype = "ENSEMBL"
+  )
+  notisna_symb_data <- deseq_res[!is.na(deseq_res$symbol), ]
+  write.table(
+    notisna_symb_data[c(7:8, 1:6)],
+    outfile,
+    row.names = FALSE,
+    sep = "\t",
+    quote = FALSE
+  )
+}
+
+
+#' 输出差异分析结果
+#' pairwise_combinations: 分组方案两两组合列表
+#' group_column: 分组列名
+#' dds2: DESeq2 对象
+#' 返回: 差异分析结果列表
 write_deseq_res <- function(pairwise_combinations,
                             group_column,
                             dds2) {
@@ -43,7 +80,7 @@ write_deseq_res <- function(pairwise_combinations,
   lapp_deseq_res <- lapply(1:nrow(pairwise_combinations), function(i) {
     cat1 <- as.character(pairwise_combinations$category1[i])
     cat2 <- as.character(pairwise_combinations$category2[i])
-    out_tab <- sprintf("%s/%s.%s_vs_%s.tsv", outdir, group_column, cat1, cat2)
+    outfile <- sprintf("%s/%s.%s_vs_%s.tsv", outdir, group_column, cat1, cat2)
     res <- results(
       dds2,
       contrast = c("group", cat1, cat2),
@@ -52,26 +89,23 @@ write_deseq_res <- function(pairwise_combinations,
     )
     # 可以先按校正和 p 值由小到大排个序，方便查看
     deseq_res <- as.data.frame(res[order(res$padj), ])
-    # 输出
+
     deseq_res$gene_id <- rownames(deseq_res)
-    write.table(
-      deseq_res[c(7, 1:6)],
-      out_tab,
-      row.names = FALSE,
-      sep = "\t",
-      quote = FALSE
-    )
-    # ENSG 转 symbol 也输出
-    return(out_tab)
+    # * # 输出. 添加 symbol 列，从 ENSG 转换
+    write_symbol_table(group_column, cat1, cat2, deseq_res, outfile)
+    return(outfile)
   })
   return(lapp_deseq_res)
 }
 
 
-deseq2_volcano <- function(in_tab) {
+#' 输出差异分析结果火山图
+#' intab: 差异分析结果表格
+#' 输出: 差异分析结果火山图
+deseq2_volcano <- function(intab) {
   # ggplot2 差异火山图
-  out_fig <- gsub("tsv", "volcano.png", in_tab)
-  deseq_res <- read.delim(in_tab, sep = "\t")
+  out_fig <- gsub("tsv", "volcano.png", intab)
+  deseq_res <- read.delim(intab, sep = "\t")
   # 例如这里根据 |log2FC| >= 1 & FDR p-value < 0.05 定义“差异”
   deseq_res[which(deseq_res$padj %in% NA), "sig"] <- "NS"
   deseq_res[which(deseq_res$log2FoldChange >= 1 &
@@ -111,23 +145,25 @@ deseq2_volcano <- function(in_tab) {
 }
 
 
+#' 输出归一化的基因表达矩阵
+#' group_column: 分组方案名
+#' 输出: 不同分组方案下归一化的基因表达矩阵
 write_norm_matrix_file <- function(group_column) {
   # 归一化前 ENSG 转 symbol, 重复的 symbol 取均值
-  # 使用 mapIds 进行映射
+  # ensg 转 symbols
   symbols <- mapIds(
     org.Hs.eg.db,
     keys = rownames(gene),
     column = "SYMBOL",
     keytype = "ENSEMBL"
   )
-  # 映射为NA的丢弃
-  isna_symbols <- symbols[!is.na(symbols)]
-  gene_count_symbols <- gene[names(isna_symbols), ]
-  gene_count_symbols$symbols <- isna_symbols
+  notisna_symbs <- symbols[!is.na(symbols)]
+  gene_count_symbols <- gene[names(notisna_symbs), ]
+  gene_count_symbols$symbol <- notisna_symbs
   # 相同基因取均值
-  gene_count_mean <- aggregate(. ~ symbols, mean, data = gene_count_symbols)
-  rownames(gene_count_mean) <- gene_count_mean$symbols
-  # 删除 symbols 列
+  gene_count_mean <- aggregate(. ~ symbol, mean, data = gene_count_symbols)
+  rownames(gene_count_mean) <- gene_count_mean$symbol
+  # 删除 symbol 列
   gene_count_mean <- gene_count_mean[, -1]
   # 转成整数格式
   gene_count_mean_int <- data.frame(lapply(gene_count_mean, as.integer))
@@ -154,9 +190,9 @@ write_norm_matrix_file <- function(group_column) {
   )
 }
 
-
+# * 主函数, deseq2 统计每个分组方案
+#' group_column: 分组方案名
 deseq2_stat <- function(group_column) {
-  # * 主函数, deseq2 统计每个分组方案
   group <- metadata[colnames(gene), group_column]
   coldata <- data.frame(group = factor(group, levels = unique(group)))
   # DESeq2 默认流程
