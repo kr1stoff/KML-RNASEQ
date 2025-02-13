@@ -28,6 +28,8 @@ rule all:
         "gene_diff/edgeR/ALL",
         "gene_diff/DESeq2/DEG",
         "gene_diff/DESeq2/pheatmap",
+        # enrich anlysis
+        "enrich/GO",
 
 
 include: "rules/common.smk"
@@ -41,3 +43,4 @@ include: "rules/rpkm_tpm.smk"
 include: "rules/gene_quant.smk"
 include: "rules/gene_diff_deseq2.smk"
 include: "rules/gene_diff_edger.smk"
+include: "rules/enrich.smk"

@@ -4,7 +4,7 @@ sink(log)
 sink(log, type = "message")
 
 
-# library
+# * library
 library(dplyr)
 
 # * io
