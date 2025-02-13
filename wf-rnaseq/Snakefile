@@ -30,6 +30,7 @@ rule all:
         "gene_diff/DESeq2/pheatmap",
         # enrich anlysis
         "enrich/GO",
+        "enrich/KEGG"
 
 
 include: "rules/common.smk"
