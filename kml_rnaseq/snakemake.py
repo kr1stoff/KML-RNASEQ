@@ -35,27 +35,27 @@ def create_snakemake_configfile(sample_names, workdir, metadata) -> dict:
     return dict_smk
 
 
-# def run_snakemake(workdir):
-#     """
-#     运行 snakemake 工作流
-#     :param workdir:
-#     :return:
-#     """
-#     logging.info('运行 snakemake')
-#     activate = get_conda_env_dict()['activate']
-#     cores = get_threads_dict()['max']
-#     snakefile = Path(__file__).resolve().parents[1].joinpath('wf-lvisa/Snakefile')
-#     configfile = f'{workdir}/.temp/snakemake.yaml'
-#     logfile = f'{workdir}/.temp/snakemake.log'
+def run_snakemake(workdir):
+    """
+    运行 snakemake 工作流
+    :param workdir:
+    :return:
+    """
+    logging.info('运行 snakemake')
+    activate = get_conda_env_dict()['activate']
+    cores = get_threads_dict()['max']
+    snakefile = Path(__file__).resolve().parents[1].joinpath('wf-rnaseq/Snakefile')
+    configfile = f'{workdir}/.temp/snakemake.yaml'
+    logfile = f'{workdir}/.temp/snakemake.log'
 
-#     cml = f"""
-#     source {activate} snakemake
-#     # use-conda
-#     snakemake -c {cores} --use-conda -s {snakefile} --configfile {configfile}
-#     """
+    cml = f"""
+    source {activate} snakemake
+    # use-conda
+    snakemake -c {cores} --use-conda -s {snakefile} --configfile {configfile}
+    """
 
-#     proc = run(cml, shell=True, executable='/bin/bash', capture_output=True, encoding='utf-8')
+    proc = run(cml, shell=True, executable='/bin/bash', capture_output=True, encoding='utf-8')
 
-#     # 输出出来这段日志
-#     with open(logfile, 'w') as f:
-#         f.write(f'[STDOUT]\n{proc.stdout}\n[STDERR]\n{proc.stderr}')
+    # 输出出来这段日志
+    with open(logfile, 'w') as f:
+        f.write(f'[STDOUT]\n{proc.stdout}\n[STDERR]\n{proc.stderr}')

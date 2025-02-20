@@ -73,7 +73,6 @@ def samptab2dataframe(samptab: str) -> pd.DataFrame:
     :return df: sample table 转的 DataFrame
     """
     logging.info('输入 sample table 转成 DataFrame 格式')
-    samptab = samptab
     if samptab.endswith('.xlsx'):
         df = pd.read_excel(samptab, header=None)
     elif samptab.endswith('.tsv'):
