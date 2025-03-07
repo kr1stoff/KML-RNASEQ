@@ -13,21 +13,26 @@ rule all:
         "trimmed/fastp.stats.tsv",
         expand("qc/RPKM_saturation/{sample}.saturation.pdf", sample=config["samples"]),
         expand("qc/qualimap_rnaseq/{sample}", sample=config["samples"]),
+
         # feature count
         "feature_counts/rpkm.tsv",
         "feature_counts/tpm.tsv",
         "feature_counts/gene_count_filter.tsv",
+
         # gene quantititation
         "gene_quant/boxplot",
         "gene_quant/violinplot",
         "gene_quant/intersample_correlation/output.tsv",
         "gene_quant/intersample_correlation/output.png",
         "gene_quant/pca",
+
         # gene differential expression
         "gene_diff/DESeq2/ALL",
-        "gene_diff/edgeR/ALL",
         "gene_diff/DESeq2/DEG",
         "gene_diff/DESeq2/pheatmap",
+        # 有报错，也没有后续流程，先不跑
+        # "gene_diff/edgeR/ALL",
+
         # enrich anlysis
         "enrich/GO",
         "enrich/KEGG"
@@ -43,5 +48,5 @@ include: "rules/rseqc_saturation.smk"
 include: "rules/rpkm_tpm.smk"
 include: "rules/gene_quant.smk"
 include: "rules/gene_diff_deseq2.smk"
-include: "rules/gene_diff_edger.smk"
+# include: "rules/gene_diff_edger.smk"
 include: "rules/enrich.smk"
