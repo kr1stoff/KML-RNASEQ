@@ -6,8 +6,8 @@ mamba run -n rnaseq hisat2 -t -p 16 --dta -x /data/mengxf/Database/HISAT2/hg38/g
     samtools view -hb |
     samtools sort -@ 16 -o SRR23955793.bam
 
-# mamba run -n rnaseq qualimap bamqc -nt 16 -c -gff /data/mengxf/Database/genome/hg38/hg38.ensGene.gtf -bam SRR23955793.bam -outdir qualimap_bamqc
+# mamba run -n rnaseq qualimap bamqc -nt 16 -c -gff /data/mengxf/Database/reference/hg38/hg38.ensGene.gtf -bam SRR23955793.bam -outdir qualimap_bamqc
 
 # ! 链特异参数 -p,--sequencing-protocol <arg>
 # * 超内存需要 --java-mem-size=30G 参数控制
-mamba run -n rnaseq qualimap rnaseq --java-mem-size=30G -pe -bam SRR23955793.bam -gtf /data/mengxf/Database/genome/hg38/hg38.ensGene.gtf -outdir qualimap_rnaseq
+mamba run -n rnaseq qualimap rnaseq --java-mem-size=30G -pe -bam SRR23955793.bam -gtf /data/mengxf/Database/reference/hg38/hg38.ensGene.gtf -outdir qualimap_rnaseq
