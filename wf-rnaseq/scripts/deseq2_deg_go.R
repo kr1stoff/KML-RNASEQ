@@ -17,7 +17,6 @@ dir.create(outdir, showWarnings = FALSE, recursive = TRUE)
 
 
 ######################################## Function ########################################
-# * 主程序
 enrich_go_pipe <- function() {
     # 不同分组方案生成的均一化表格
     files <- list.files(
@@ -31,7 +30,6 @@ enrich_go_pipe <- function() {
         tempres <- go_plot(enrich_go_res, outprfx)
     }
 }
-
 
 go_plot <- function(enrich_go_res, outprfx) {
     # 绘制条形图
@@ -68,8 +66,7 @@ go_plot <- function(enrich_go_res, outprfx) {
     dev.off()
 }
 
-
-#' enrichGO 富集分析
+# enrichGO 富集分析
 analyza_enrich_go <- function(dsfile, outprfx) {
     data <- read.delim(dsfile)
     converted_ids <- bitr(

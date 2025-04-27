@@ -19,7 +19,6 @@ dir.create(outdir, showWarnings = FALSE, recursive = TRUE)
 
 
 ######################################## Function ########################################
-# * 主程序
 enrich_kegg_pipe <- function() {
     # 不同分组方案生成的均一化表格
     files <- list.files(
@@ -48,7 +47,6 @@ generate_geneFC <- function(dsfile) {
         OrgDb = org.Hs.eg.db
     )
     uniq_cnvrt_ids <- cnvrt_ids[!duplicated(cnvrt_ids$ENSEMBL), ]
-
     genes <- uniq_cnvrt_ids$ENTREZID
     geneFC <- data[uniq_cnvrt_ids$ENSEMBL, ]$log2FoldChange
     names(geneFC) <- genes
