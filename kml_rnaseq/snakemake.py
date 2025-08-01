@@ -50,10 +50,9 @@ def run_snakemake(workdir):
 
     cml = f"""
     source {activate} snakemake
-    # use-conda
-    snakemake -c {cores} --use-conda -s {snakefile} --configfile {configfile}
+    snakemake -c {cores} --use-conda -s {snakefile} --configfile {configfile} --ignore-incomplete --scheduler greedy
     """
-
+    logging.debug(cml)
     proc = run(cml, shell=True, executable='/bin/bash', capture_output=True, encoding='utf-8')
 
     # 输出出来这段日志

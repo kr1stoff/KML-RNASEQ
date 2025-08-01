@@ -6,7 +6,7 @@ rule fastp:
         html="trimmed/{sample}.html",
         json="trimmed/{sample}.json",
     conda:
-        config["conda"]["basic"]
+        config["conda"]["basic2"]
     log:
         "logs/fastp/{sample}.log",
     benchmark:

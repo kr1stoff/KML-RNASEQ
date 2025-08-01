@@ -2,21 +2,9 @@ from kml_rnaseq import create_snakemake_configfile
 from kml_rnaseq import get_sample_names_by_samptab
 # from kml_rnaseq import run_snakemake
 
-# * 原始数据
-# work_dir = '/data/mengxf/Project/KML250122_rnaseq_ZiYan/result/25021102'
-# sample_table = '/data/mengxf/Project/KML250122_rnaseq_ZiYan/work/250122/input.tsv'
+sample_table = '/data/mengxf/Project/KML250122-rnaseq-ZiYan/work/250122/input.tsv'
+metadata = '/data/mengxf/Project/KML250122-rnaseq-ZiYan/work/250122/metadata.tsv'
+work_dir = '/data/mengxf/Project/KML250122-rnaseq-ZiYan/result/250731'
 
-# * 抽数据，小样本
-work_dir = '/data/mengxf/Project/KML250122_rnaseq_ZiYan/result/250207'
-sample_table = '/data/mengxf/Project/KML250122_rnaseq_ZiYan/work/250122/input.1M.tsv'
-
-metadata = '/data/mengxf/Project/KML250122_rnaseq_ZiYan/work/250122/metadata.tsv'
-
-
-def test_create():
-    sample_names = get_sample_names_by_samptab(sample_table)
-    print(create_snakemake_configfile(sample_names, work_dir, metadata))
-
-
-# def test_run():
-#     run_snakemake(work_dir)
+sample_names = get_sample_names_by_samptab(sample_table)
+print(create_snakemake_configfile(sample_names, work_dir, metadata))

@@ -1,5 +1,6 @@
 activate: /home/mengxf/miniforge3/bin/activate
 basic: basic
+basic2: basic2
 python: python3.12
 R: R.rnaseq
 Rpheatmap: R.pheatmap
