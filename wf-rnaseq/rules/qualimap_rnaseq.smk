@@ -11,11 +11,11 @@ rule qualimap_rnaseq:
     benchmark:
         "logs/qualimap/rna-seq/{sample}.benchmark"
     params:
-        # TODO 链特异参数 -p,--sequencing-protocol <arg>
+        # todo 链特异参数 -p,--sequencing-protocol <arg>
         # * 超内存需要 --java-mem-size=30G 参数控制
         extra="--java-mem-size=30G -pe",
     wrapper:
         f"file:{workflow.basedir}/wrappers/bio/qualimap/rnaseq"
 
 
-# TODO 合并质控结果到一个表格
+# todo 合并质控结果到一个表格
