@@ -50,7 +50,7 @@ write_symbol_table <- function(group_column,
                                cat2,
                                deseq_res,
                                outfile) {
-  # * ENSG 转 symbol 也输出
+  # * ENSG 转 symbol 输出
   deseq_res$symbol <- mapIds(
     org.Hs.eg.db,
     keys = deseq_res$gene_id,
