@@ -1,0 +1,35 @@
+conda:
+  R: R.rnaseq
+  Rpheatmap: R.pheatmap
+  activate: /home/mengxf/miniforge3/bin/activate
+  fastp: basic2
+  fastqc: basic
+  featurecounts: rnaseq
+  hisat2: rnaseq
+  multiqc: basic
+  python: python3.12
+  qualimap: rnaseq
+  rseqc: rnaseq
+database:
+  gtf: /data/mengxf/Database/reference/hg38/hg38.ensGene.gtf
+  hisat2_index: /data/mengxf/Database/HISAT2/hg38/genome
+  rseqc_bed: /data/mengxf/Database/RSeQC/hg38.ensGene.bed
+metadata: /data/mengxf/GitHub/KML-RNASEQ/tests/250115.metadata.tsv
+samples:
+- T5793002
+- T5793001
+- T5887001
+- T5826001
+- T5884003
+- T5887003
+- T5826003
+- T5793003
+- T5887002
+- T5826002
+- T5884001
+- T5884002
+threads:
+  high: 16
+  low: 4
+  max: 32
+workdir: /data/mengxf/Project/KML260520-RNASEQ-UPGRADE/result/260520

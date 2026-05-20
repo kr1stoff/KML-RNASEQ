@@ -14,7 +14,7 @@ rule rseqc_saturation:
     run:
         outdir = str(Path(output[0]).parent)
         out_prefix = output[0].replace(".saturation.pdf", "")
-        env = config["conda"]["rnaseq"]
+        env = config["conda"]["rseqc"]
         activate = config["conda"]["activate"]
         shell(
             """

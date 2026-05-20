@@ -13,7 +13,7 @@ rule fastqc:
     resources:
         mem_mb=1024,
     conda:
-        config["conda"]["basic"]
+        config["conda"]["fastqc"]
     threads: config["threads"]["low"]
     # ! 需要在 wrapper 的环境安装 snakemake-wrapper-utils.
     wrapper:
@@ -38,6 +38,6 @@ rule multiqc:
     benchmark:
         "logs/multiqc.bm"
     conda:
-        config["conda"]["basic"]
+        config["conda"]["multiqc"]
     wrapper:
         f"file:{workflow.basedir}/wrappers/bio/multiqc"

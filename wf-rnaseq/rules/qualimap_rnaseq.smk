@@ -5,7 +5,7 @@ rule qualimap_rnaseq:
     output:
         directory("qc/qualimap_rnaseq/{sample}"),
     conda:
-        config["conda"]["rnaseq"]
+        config["conda"]["qualimap"]
     log:
         "logs/qualimap/rna-seq/{sample}.log",
     benchmark:

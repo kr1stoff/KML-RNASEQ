@@ -21,7 +21,7 @@ rule feature_counts:
     benchmark:
         "logs/feature_counts/all.benchmark"
     conda:
-        config["conda"]["rnaseq"]
+        config["conda"]["featurecounts"]
     wrapper:
         f"file:{workflow.basedir}/wrappers/bio/subread/featurecounts"
 

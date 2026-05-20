@@ -15,7 +15,7 @@ rule hisat2_align:
     output:
         "mapped/{sample}.bam",
     conda:
-        config["conda"]["rnaseq"]
+        config["conda"]["hisat2"]
     log:
         "logs/hisat2_align/{sample}.log",
     benchmark:

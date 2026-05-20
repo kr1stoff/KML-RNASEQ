@@ -10,17 +10,24 @@ properties:
     properties:
       R:
         type: string
-      basic:
-        type: string
-      rnaseq:
-        type: string
       python:
         type: string
-    required:
-      - R
-      - basic
-      - rnaseq
-      - python
+      Rpheatmap:
+        type: string
+      fastp:
+        type: string
+      fastqc:
+        type: string
+      featurecounts:
+        type: string
+      hisat2:
+        type: string
+      multiqc:
+        type: string
+      qualimap:
+        type: string
+      rseqc:
+        type: string
 
   database:
     type: object

@@ -1,7 +1,11 @@
 activate: /home/mengxf/miniforge3/bin/activate
-basic: basic
-basic2: basic2
+fastp: basic2
+fastqc: basic
+multiqc: basic
+featurecounts: rnaseq
+hisat2: rnaseq
+qualimap: rnaseq
+rseqc: rnaseq
 python: python3.12
 R: R.rnaseq
 Rpheatmap: R.pheatmap
-rnaseq: rnaseq
