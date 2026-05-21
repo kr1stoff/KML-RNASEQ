@@ -1,10 +1,10 @@
-# * log
+# log
 log <- file(snakemake@log[[1]], open = "wt")
 sink(log)
 sink(log, type = "message")
 
 
-# * library
+# library
 library(clusterProfiler)
 library(org.Hs.eg.db)
 library(ggplot2)
@@ -14,6 +14,11 @@ library(ggplot2)
 indir <- snakemake@input[[1]]
 outdir <- snakemake@output[[1]]
 dir.create(outdir, showWarnings = FALSE, recursive = TRUE)
+# 输出参数到 log 文件
+cat("=== Input/Output Parameters ===\n")
+cat("indir:", indir, "\n")
+cat("outdir:", outdir, "\n")
+cat("===============================\n")
 
 
 ######################################## Function ########################################
@@ -27,9 +32,22 @@ enrich_go_pipe <- function() {
     for (dsfile in files) {
         outprfx <- sprintf("%s/%s", outdir, gsub(".tsv", "", basename(dsfile)))
         enrich_go_res <- analyza_enrich_go(dsfile, outprfx)
-        tempres <- go_plot(enrich_go_res, outprfx)
+        # ! 没有显著的富集通路就跳过
+        if (nrow(as.data.frame(enrich_go_res)) == 0) {
+            cat("\n没有显著富集基因 for dsfile:", dsfile, "\n")
+            next
+        }
+        tryCatch({
+            tempres <- go_plot(enrich_go_res, outprfx)
+        }, error = function(e) {
+            cat("\nError in go_plot:\n")
+            cat("  dsfile:", dsfile, "\n")
+            cat("  enrich_go_res dimensions:", dim(enrich_go_res), "\n")
+            cat(e$message, "\n")
+        })
     }
 }
+
 
 go_plot <- function(enrich_go_res, outprfx) {
     # 绘制条形图
@@ -65,6 +83,7 @@ go_plot <- function(enrich_go_res, outprfx) {
     )
     dev.off()
 }
+
 
 # enrichGO 富集分析
 analyza_enrich_go <- function(dsfile, outprfx) {

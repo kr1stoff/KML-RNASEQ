@@ -11,6 +11,11 @@ library(dplyr)
 indir <- snakemake@input[[1]]
 outdir <- snakemake@output[[1]]
 dir.create(outdir, showWarnings = FALSE, recursive = TRUE)
+# 输出参数到 log 文件
+cat("=== Input/Output Parameters ===\n")
+cat("indir:", indir, "\n")
+cat("outdir:", outdir, "\n")
+cat("===============================\n")
 
 # 不同分组方案生成的均一化表格
 files <- list.files(
@@ -43,4 +48,12 @@ for (dsfile in files) {
         sep = "\t",
         quote = FALSE
     )
+    # 输出中间结果到 log 文件
+    cat("=== Intermediate Results ===\n")
+    cat("dsfile:", dsfile, "\n")
+    cat("data dimensions:", dim(data), "\n")
+    cat("filt_data dimensions:", dim(filt_data), "\n")
+    cat("sort_filt_data dimensions:", dim(sort_filt_data), "\n")
+    cat("outfile:", outfile, "\n")
+    cat("===============================\n")
 }

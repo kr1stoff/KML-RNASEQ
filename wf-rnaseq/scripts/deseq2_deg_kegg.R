@@ -1,4 +1,3 @@
-# ! Rstudio 跑不通，但是直接在服务器上用 R 交互可以
 # * log
 log <- file(snakemake@log[[1]], open = "wt")
 sink(log)
@@ -16,6 +15,11 @@ library(pathview)
 indir <- snakemake@input[[1]]
 outdir <- snakemake@output[[1]]
 dir.create(outdir, showWarnings = FALSE, recursive = TRUE)
+# 输出参数到 log 文件
+cat("=== Input/Output Parameters ===\n")
+cat("indir:", indir, "\n")
+cat("outdir:", outdir, "\n")
+cat("===============================\n")
 
 
 ######################################## Function ########################################
@@ -29,7 +33,22 @@ enrich_kegg_pipe <- function() {
     for (dsfile in files) {
         outprfx <- sprintf("%s/%s", outdir, gsub(".tsv", "", basename(dsfile)))
         geneFC <- generate_geneFC(dsfile)
-        enrich_kegg_res <- analyza_enrich_kegg(names(geneFC), outprfx)
+        # ! 如果没有差异基因，跳过该方案
+        if (length(geneFC) == 0) {
+            cat("Warning: 分组: ", dsfile, " 没有差异基因，跳过该方案。\n")
+            next
+        }
+        # 20260521 报错, 添加日志
+        tryCatch({
+            enrich_kegg_res <- analyza_enrich_kegg(names(geneFC), outprfx)
+        }, error = function(e) {
+            cat("Error in analyza_enrich_kegg:\n")
+            cat("  dsfile:", dsfile, "\n")
+            cat("  geneFC dimensions:", dim(geneFC), "\n")
+            cat("  entrezids:", paste(names(geneFC), collapse = ", "), "\n")
+            cat(e$message, "\n")
+            stop(e$message)
+        })
         # ! 没有显著的富集通路就跳过
         if (dim(enrich_kegg_res)[1] == 0) next
         kegg_plot(enrich_kegg_res, outprfx)
