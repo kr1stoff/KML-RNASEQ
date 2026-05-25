@@ -20,7 +20,7 @@ rule fastp:
 
 rule qc_stat:
     input:
-        expand("trimmed/{sample}.json", sample=config["samples"]),
+        expand("trimmed/{sample}.json", sample=["samples"]),
     output:
         "trimmed/fastp.stats.tsv",
     benchmark:

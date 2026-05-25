@@ -5,6 +5,7 @@ import logging
 from kml_rnaseq import get_conda_env_dict
 from kml_rnaseq import get_threads_dict
 from kml_rnaseq import get_database_dict
+from kml_rnaseq import get_resource_dict
 
 
 def create_snakemake_configfile(sample_names, workdir, metadata) -> dict:
@@ -26,7 +27,8 @@ def create_snakemake_configfile(sample_names, workdir, metadata) -> dict:
         'threads': get_threads_dict(),
         'conda': get_conda_env_dict(),
         'metadata': metadata,
-        'database': get_database_dict()
+        'database': get_database_dict(),
+        'resource': get_resource_dict()
     }
 
     with open(f'{workdir}/.temp/snakemake.yaml', 'w') as f:

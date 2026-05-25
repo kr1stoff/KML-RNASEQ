@@ -33,23 +33,25 @@ enrich_kegg_pipe <- function() {
     for (dsfile in files) {
         outprfx <- sprintf("%s/%s", outdir, gsub(".tsv", "", basename(dsfile)))
         geneFC <- generate_geneFC(dsfile)
-        # ! 如果没有差异基因，跳过该方案
+        # 如果没有差异基因，跳过该方案
         if (length(geneFC) == 0) {
             cat("Warning: 分组: ", dsfile, " 没有差异基因，跳过该方案。\n")
             next
         }
-        # 20260521 报错, 添加日志
+        # 20260521 报错, 添加日志.
         tryCatch({
+            # ! 20260522
             enrich_kegg_res <- analyza_enrich_kegg(names(geneFC), outprfx)
         }, error = function(e) {
             cat("Error in analyza_enrich_kegg:\n")
             cat("  dsfile:", dsfile, "\n")
-            cat("  geneFC dimensions:", dim(geneFC), "\n")
-            cat("  entrezids:", paste(names(geneFC), collapse = ", "), "\n")
+            cat("  geneFC len:", length(geneFC), "\n")
+            cat("  entrezids:", paste(names(geneFC)[1:20], collapse = ","), "\n")
             cat(e$message, "\n")
-            stop(e$message)
         })
-        # ! 没有显著的富集通路就跳过
+        # 没有显著的富集通路就跳过
+        # 如果 enrich_kegg_res 没有赋值, 就跳过
+        if (!exists("enrich_kegg_res")) next
         if (dim(enrich_kegg_res)[1] == 0) next
         kegg_plot(enrich_kegg_res, outprfx)
         kegg_pathway_plot(geneFC, enrich_kegg_res$ID[1], outprfx)

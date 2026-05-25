@@ -4,5 +4,6 @@ from .config import get_conda_env_dict
 from .config import get_threads_dict
 from .config import get_database_dict
 from .config import get_software_dict
+from .config import get_resource_dict
 from .snakemake import create_snakemake_configfile
 from .snakemake import run_snakemake

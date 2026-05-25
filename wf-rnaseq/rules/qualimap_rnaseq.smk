@@ -12,8 +12,9 @@ rule qualimap_rnaseq:
         "logs/qualimap/rna-seq/{sample}.benchmark"
     params:
         # todo 链特异参数 -p,--sequencing-protocol <arg>
-        # * 超内存需要 --java-mem-size=30G 参数控制
-        extra="--java-mem-size=30G -pe",
+        # 临时目录需要设置, SH DRAGEN 服务器根目录下 /tmp 太小; 超内存需要 --java-mem-size=30G 参数控制
+        java_opts=f"-Djava.io.tmpdir={config['resource']['tmp_dir']}",
+        extra=f"-pe --java-mem-size=30G",
     wrapper:
         f"file:{workflow.basedir}/wrappers/bio/qualimap/rnaseq"
 

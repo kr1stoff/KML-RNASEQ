@@ -47,3 +47,12 @@ def get_threads_dict() -> dict:
     dict_thr = {'high': high_threads, 'low': low_threads, 'max': max_threads}
 
     return dict_thr
+
+
+def get_resource_dict() -> dict:
+    yaml_resource = Path(__file__).resolve().parents[1].joinpath('config/resource.yaml')
+
+    with open(yaml_resource) as f:
+        dict_resource = yaml.safe_load(f)
+
+    return dict_resource

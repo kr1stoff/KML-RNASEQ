@@ -25,6 +25,12 @@ snakemake --cores 32 --use-conda --rerun-incomplete --scheduler \
 
 ## 更新
 
+### [v1.0.1] 20260525 修复 BUG
+
+- qualimap rnaseq 部分, 指定临时目录, 避免因为存储不空不够导致流程中断
+- gene_diff_deseq2.R, data.frame  check.names = FALSE 避免列名里面的 - 改成 . 导致后续分析错误
+- 部分 R 脚本添加 tryCatch 错误处理
+
 ### [v1.0.0] 20260521 初始版本
 
 - DESeq2 分组无差异时 (即没有基因 padj < 0.05), deseq2_pheatmap.R top20 gene 部分为空, 会引发报错. 如果没有差异基因, 则跳过该方案.

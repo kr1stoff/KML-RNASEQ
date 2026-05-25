@@ -166,17 +166,28 @@ write_norm_matrix_file <- function(group_column) {
   # 删除 symbol 列
   gene_count_mean <- gene_count_mean[, -1]
   # 转成整数格式
-  gene_count_mean_int <- data.frame(lapply(gene_count_mean, as.integer))
+  # ! [20260525 - BUG] R 会把列名里面的 - 改成 . 导致后续分析错误, 使用 check.names = FALSE 避免问题
+  gene_count_mean_int <- data.frame(lapply(gene_count_mean, as.integer), check.names = FALSE)
   rownames(gene_count_mean_int) <- rownames(gene_count_mean)
 
   # 获取归一化的基因表达矩阵, ENSG 编号转成基因名称
   group <- metadata[colnames(gene_count_mean_int), group_column]
   coldata <- data.frame(group = factor(group, levels = unique(group)))
   # 构建 DESeqDataSet 对象
-  dds <- DESeqDataSetFromMatrix(
-    countData = gene_count_mean_int,
-    colData = coldata,
-    design = ~group
+  tryCatch({
+      dds <- DESeqDataSetFromMatrix(
+      countData = gene_count_mean_int,
+      colData = coldata,
+      design = ~group
+    )}, error = function(e) {
+    cat("write_norm_matrix_file error:\n")
+    cat("gene_count_mean_int dim:", dim(gene_count_mean_int), "\n")
+    cat("gene_count_mean_int colnames:", colnames(gene_count_mean_int), "\n")
+    cat("group_column:", group_column, "\n")
+    cat("group:", group, "\n")
+    cat("error:", e$message, "\n")
+    stop(e)
+    }
   )
   # 输出归一化的基因表达矩阵
   vsd <- assay(vst(dds, blind = FALSE))
@@ -197,10 +208,20 @@ deseq2_stat <- function(group_column) {
   coldata <- data.frame(group = factor(group, levels = unique(group)))
   # DESeq2 默认流程
   # 第一步，构建 DESeqDataSet 对象
-  dds <- DESeqDataSetFromMatrix(
+  # ! [20260525 - BUG] 确定表达矩阵和 meta 中的样本是否一致
+  tryCatch({
+    dds <- DESeqDataSetFromMatrix(
     countData = gene,
     colData = coldata,
     design = ~group
+    )
+  }, error = function(e) {
+    cat("deseq2_stat error:\n")
+    cat("group_column:", group_column, "\n")
+    cat("group:", group, "\n")
+    cat("error:", e$message, "\n")
+    stop(e)
+    }
   )
   # 输出归一化的基因表达矩阵
   vsd <- assay(vst(dds, blind = FALSE))
